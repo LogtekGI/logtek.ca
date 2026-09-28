@@ -17,10 +17,15 @@
 <meta name="theme-color" content="#A26D27">
 <meta property="og:image" content="https://logtek.ca/assets/img/og-image.png">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<link rel="expect" href="#main" blocking="render">
+<script src="assets/js/fx-kerf.js?v=20260928a"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css?v=20260928a">
+<link rel="stylesheet" href="assets/css/fx-topo-stump.css?v=20260928a">
+<link rel="stylesheet" href="assets/css/fx-guide-bar.css?v=20260928a">
+<link rel="stylesheet" href="assets/css/fx-kerf.css?v=20260928a">
 </head>
 <body data-page="services" data-lang="fr" data-email="brandon.lavoie@logtek.ca" data-endpoint="">
 <a class="skip" href="#main">Aller au contenu</a>
@@ -30,12 +35,12 @@
       <img src="assets/img/logo.svg" alt="Logtek" width="106" height="48">
     </a>
     <nav class="main-nav" id="main-nav" aria-label="Navigation principale">
-      <a href="logiciel.html">Logiciel</a><a href="chaines.html">Chaînes & pièces</a><a href="services.html" aria-current="page">Services</a><a href="a-propos.html">À propos</a>
-      <a class="app-link" href="https://logtekgi.ca" rel="noopener"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4.5" y="10.5" width="15" height="10.5" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>Connexion</a>
+      <a href="logiciel.html">Logiciel</a><a href="chaines.html">Pièces</a><a href="services.html" aria-current="page">Services</a><a href="a-propos.html">À propos</a>
+      <a class="app-link" href="https://logtekgi.ca" rel="noopener"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Connexion</a>
       <a class="lang" href="en/services.html" hreflang="en" lang="en">EN</a>
       <a class="btn btn-sm" href="contact.html">Nous joindre</a>
     </nav>
-    <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Menu"><svg class="ic ic-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><svg class="ic ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Menu"><svg class="ic ic-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg><svg class="ic ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
   </div>
 </header>
 <main id="main">
@@ -52,10 +57,10 @@
 <section class="section">
   <div class="wrap">
     <div class="services">
-      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9L12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11v4.5c1.5 1.5 3.5 2.3 5.5 2.3s4-.8 5.5-2.3V11M21.5 9v5"/></svg><span class="chip chip-ok">Sur demande</span><h3>Implantation & formation</h3><p>On configure Logtek G&amp;I avec vous (entreprise, machines, chantiers, employés) et on forme votre équipe, au bureau ou au garage.</p></div>
-      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg><span class="chip chip-ok">Sur demande</span><h3>Installation en cabine</h3><p>Tablette durcie, antenne GPS, support et alimentation : on équipe la machine pour que tout marche du premier coup.</p></div>
-      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7.5h4l1.8-2.5h6.4L17 7.5h4V19H3z"/><circle cx="12" cy="13" r="3.5"/></svg><span class="chip chip-soon">En développement</span><h3>Caméras de tête d'abatteuse</h3><p>Voir la bille et la coupe depuis la cabine, sur la même tablette que le logiciel.</p></div>
-      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 6.5h11v9h-11zM13.5 10h4.5l3 3v2.5h-7.5"/><circle cx="6.5" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg><span class="chip chip-soon">En développement</span><h3>Livraison de pièces au chantier</h3><p>Chaînes et pièces d'usure livrées là où vous travaillez, selon votre saison.</p></div></div>
+      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"/><path d="M22 10v6"/><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"/></svg><span class="chip chip-ok">Sur demande</span><h3>Implantation & formation</h3><p>On configure Logtek G&amp;I avec vous (entreprise, machines, chantiers, employés) et on forme votre équipe, au bureau ou au garage.</p></div>
+      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg><span class="chip chip-ok">Sur demande</span><h3>Installation en cabine</h3><p>Tablette durcie, antenne GPS, support et alimentation : on équipe la machine pour que tout marche du premier coup.</p></div>
+      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg><span class="chip chip-soon">En développement</span><h3>Caméras de tête d'abatteuse</h3><p>Voir la bille et la coupe depuis la cabine, sur la même tablette que le logiciel.</p></div>
+      <div class="service"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 18V6a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v11a1 1 0 0 0 1 1h2"/><path d="M15 18H9"/><path d="M19 18h2a1 1 0 0 0 1-1v-3.65a1 1 0 0 0-.22-.624l-3.48-4.35A1 1 0 0 0 17.52 8H14"/><circle cx="17" cy="18" r="2"/><circle cx="7" cy="18" r="2"/></svg><span class="chip chip-soon">En développement</span><h3>Livraison de pièces au chantier</h3><p>Pièces d'usure livrées là où vous travaillez, selon votre saison.</p></div></div>
   </div>
 </section>
 <section class="section section-alt">
@@ -72,11 +77,11 @@
     <label class="field"><span>Entreprise</span><input name="entreprise" autocomplete="organization"></label>
     <label class="field"><span>Courriel *</span><input name="courriel" type="email" autocomplete="email" required></label>
     <label class="field"><span>Téléphone</span><input name="telephone" type="tel" autocomplete="tel"></label>
-    <label class="field full"><span>Sujet</span><select name="sujet"><option value="demo">Logiciel — démo ou question</option><option value="chaines">Chaînes — soumission</option><option value="pieces">Pièces</option><option value="services">Services</option><option value="autre">Autre</option></select></label>
+    <label class="field full"><span>Sujet</span><select name="sujet"><option value="demo">Logiciel — démo ou question</option><option value="pieces">Pièces</option><option value="services">Services</option><option value="autre">Autre</option></select></label>
     
     <label class="field full"><span>Message *</span><textarea name="message" rows="5" required placeholder=""></textarea></label>
   </div>
-  <button class="btn" type="submit">Envoyer <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+  <button class="btn" type="submit">Envoyer <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></button>
   <p class="form-status" role="status" aria-live="polite"></p>
 </form>
   </div>
@@ -87,20 +92,20 @@
   <div class="wrap footer-grid">
     <div class="footer-brand">
       <img src="assets/img/logo-light.svg" alt="Logtek" width="132" height="60" class="footer-logo">
-      <p>Tout ce qu'il faut au forestier — du logiciel à la chaîne.</p>
+      <p>Tout ce qu'il faut au forestier — du logiciel aux pièces.</p>
     </div>
     <div>
       <h3>Entreprise</h3>
       <a href="logiciel.html">Logiciel Logtek G&amp;I</a>
-      <a href="chaines.html">Chaînes & pièces</a>
+      <a href="chaines.html">Pièces</a>
       <a href="services.html">Services</a>
       <a href="a-propos.html">À propos</a>
     </div>
     <div>
       <h3>Nous joindre</h3>
-      <a href="mailto:brandon.lavoie@logtek.ca"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3.5 6l8.5 7 8.5-7"/></svg>brandon.lavoie@logtek.ca</a>
+      <a href="mailto:brandon.lavoie@logtek.ca"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>brandon.lavoie@logtek.ca</a>
       
-      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg>Dégelis, Bas-Saint-Laurent (Québec)</span>
+      <span><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>Dégelis, Bas-Saint-Laurent (Québec)</span>
     </div>
   </div>
   <div class="wrap footer-base">
@@ -108,6 +113,9 @@
     <a href="en/services.html" hreflang="en">English</a>
   </div>
 </footer>
-<script src="assets/js/main.js" defer></script>
+<script src="assets/js/main.js?v=20260928a" defer></script>
+<script src="assets/js/fx-core.js?v=20260928a" defer></script>
+<script src="assets/js/fx-guide-bar.js?v=20260928a" defer></script>
+<script src="assets/js/fx-topo-stump.js?v=20260928a" defer></script>
 </body>
 </html>

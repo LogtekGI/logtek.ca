@@ -1,0 +1,58 @@
+/* Logtek — « De la coupe à la carte » (accueil, fx-reel-map.js)
+   Calque des courbes de niveau posé sur la vidéo du reel, carte du hero qui la prolonge, étiquette
+   « Équidistance 10 m » à la place de l'horodatage et point GPS qui rejoint le téléphone.
+   Tout est injecté par le script (aria-hidden) : sans JS, rien ici ne s'applique et topo.svg reste en place. */
+
+/* Calque de la sortie : même boîte et même cadrage que .reel-canvas */
+.fx-reel-map-iso {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 45%; pointer-events: none;
+}
+/* Suit la « respiration » de la vidéo (l'heure de départ est recalée sur celle de .reel-canvas par le script) */
+.fx-reel-map-iso.fx-reel-map-breathe { animation: reel-breathe 16s ease-in-out infinite alternate; }
+/* Mouvement réduit : calque fixe posé au-dessus des voiles, au zoom fixe de .reel-media */
+.fx-reel-map-iso.fx-reel-map-static { transform: scale(1.1); }
+
+/* Pendant la sortie, le fond de carte remplace l'assombrissement du reel (pas de double voile) */
+.js .reel.fx-reel-map-on .reel-shade::after { opacity: 0; }
+
+/* Étiquette de relevé : même place et même typo que l'horodatage, sans décaler la mise en page */
+/* Même case de grille que l'horodatage : la pastille réserve la largeur de l'étiquette dès le chargement (pas de débordement sur cellulaire) */
+.fx-reel-map-rec { display: inline-grid; grid-template-columns: auto auto; column-gap: 8px; align-items: center; justify-items: end; }
+.fx-reel-map-rec > i { grid-area: 1 / 1; }
+.fx-reel-map-rec > [data-tc] { grid-area: 1 / 2; }
+.fx-reel-map-ci {
+  grid-area: 1 / 1 / 2 / 3; justify-self: end; display: inline-flex; align-items: center; gap: 8px;
+  font: inherit; font-weight: 700; color: #F3E9D8; white-space: nowrap;
+  opacity: 0; transform: translate3d(0, 6px, 0);
+  transition: opacity .35s ease, transform .5s cubic-bezier(.16, 1, .3, 1);
+}
+.fx-reel-map-ci::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #D9A864; box-shadow: 0 0 10px rgba(217, 168, 100, .7); }
+.reel-meta [data-tc] { transition: opacity .25s ease; }
+.fx-reel-map-rec > i { transition: visibility 0s .2s; }
+.reel.fx-reel-map-ci-on .fx-reel-map-rec > i { visibility: hidden; transition-delay: 0s; }
+.reel.fx-reel-map-ci-on .fx-reel-map-rec [data-tc] { opacity: 0; }
+.reel.fx-reel-map-ci-on .fx-reel-map-ci { opacity: 1; transform: none; }
+/* Cellulaire : la pastille de .reel-meta suit la ligne des coordonnées ; le libellé anglais, plus long, se resserre */
+@media (max-width: 640px) { html[lang|="en"] .fx-reel-map-ci { letter-spacing: .06em; } }
+
+/* Hero : la carte calculée remplace topo.svg (mêmes couleurs, même opacité) */
+.fx-reel-map-topo { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; }
+.fx-reel-map-topo.fx-reel-map-in { opacity: 1; }
+.fx-reel-map-topo.fx-reel-map-fade { transition: opacity .9s ease; }
+.hero > .topo-bg.fx-reel-map-live { background-image: none; }
+
+/* Point GPS (comme .gm-me-dot de l'app) et sa courte traîne */
+.fx-reel-map-dot {
+  position: absolute; left: -6px; top: -6px; width: 12px; height: 12px; border-radius: 50%;
+  background: #3B82F6; border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, .5), 0 0 0 6px rgba(59, 130, 246, .18);
+  opacity: 0; will-change: transform, opacity; pointer-events: none;
+}
+.fx-reel-map-trail { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; }
+.fx-reel-map-trail path { fill: none; stroke: #3B82F6; stroke-width: 2; stroke-linecap: round; stroke-opacity: .55; stroke-dasharray: 0 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-reel-map-iso, .fx-reel-map-iso.fx-reel-map-breathe { animation: none; }
+  .fx-reel-map-topo, .fx-reel-map-ci, .reel-meta [data-tc] { transition: none; }
+  .fx-reel-map-dot, .fx-reel-map-trail { display: none; }
+}

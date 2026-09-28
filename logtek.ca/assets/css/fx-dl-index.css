@@ -1,0 +1,112 @@
+/* Logtek — fx-dl-index : « Indexage 90 ↔ 97 DL » (page Pièces seulement)
+   Habillage du module fx-dl-index.js : bande photo sur canevas, cran bronze avec compteur de maillons,
+   cote DAO sous la photo, tambours d'odomètre, palette du code produit, maillon qui vole vers la
+   soumission, entrée de la barre de soumission. Tout est préfixé fx-dl-index- ou placé sous .fx-dl-index
+   (classe posée par le script) : sans JS, aucune règle ne cache quoi que ce soit.
+   Seules propriétés animées : transform, opacity (et translate / scale individuels). */
+
+/* Place de la cote réservée dès le premier affichage (CLS 0) : @media (scripting) est évalué avant tout script;
+   .js couvre les navigateurs qui ne connaissent pas cette requête. */
+@media (scripting: enabled) { .product.featured .product-visual.photo { padding-bottom: 44px; } }
+.js .product.featured .product-visual.photo { padding-bottom: 44px; }
+
+.fx-dl-index .chip { z-index: 3; }
+
+/* ---------- bande sur canevas (même boîte verticale que la photo, toute la largeur de la vignette) ---------- */
+.fx-dl-index-run {
+  position: absolute; left: 0; top: 0; width: 100%; height: 0; z-index: 1;
+  opacity: 0; pointer-events: none; transition: opacity .16s linear;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.fx-dl-index-live .fx-dl-index-run { opacity: 1; }
+/* opacity et non visibility : le texte alt reste dans l'arbre d'accessibilité */
+.fx-dl-index img { transition: opacity .16s linear; }
+.fx-dl-index-live img { opacity: 0; }
+
+/* ---------- cran bronze + compteur de maillons ---------- */
+.fx-dl-index-notch, .fx-dl-index-dim { position: absolute; z-index: 2; pointer-events: none; opacity: 0; }
+.fx-dl-index-go .fx-dl-index-notch, .fx-dl-index-static .fx-dl-index-notch { opacity: 1; } /* le cran n'apparaît qu'au départ de la chaîne */
+.fx-dl-index-ready .fx-dl-index-dim { opacity: 1; }
+.fx-dl-index-notch { width: 0; height: 0; --fx-dl-index-head: 50px; }
+.fx-dl-index-tip {
+  position: absolute; left: -5px; top: -7px; width: 0; height: 0;
+  border-top: 7px solid #A26D27; border-left: 5px solid transparent; border-right: 5px solid transparent;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .9));
+}
+.fx-dl-index-needle {
+  position: absolute; left: -.5px; width: 1px; bottom: 7px; height: calc(var(--fx-dl-index-head) - 21px);
+  background: linear-gradient(to bottom, rgba(162, 109, 39, 0), #A26D27 70%);
+}
+.fx-dl-index-read {
+  position: absolute; left: 0; top: calc(var(--fx-dl-index-head) * -1); transform: translate3d(-50%, 0, 0);
+  display: inline-flex; align-items: center; gap: 3px; white-space: nowrap;
+  font: 600 11px/14px var(--font-head, "Sora", sans-serif); letter-spacing: .02em; color: #8A5A1E;
+  --fx-dl-index-lh: 14px;
+}
+.fx-dl-index-read small { font: 600 8.5px/14px var(--font-body, sans-serif); letter-spacing: .12em; color: #72685A; padding-top: 2px; }
+.fx-dl-index-glint {
+  position: absolute; left: 0; top: -2px; width: 26px; height: 26px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255, 236, 196, .95), rgba(217, 168, 100, .55) 45%, rgba(217, 168, 100, 0));
+  transform: translate(-50%, -50%) scale(.3); opacity: 0; mix-blend-mode: multiply;
+}
+
+/* ---------- tambours (odomètre) ---------- */
+.fx-dl-index-odo { display: inline-flex; vertical-align: top; font-variant-numeric: tabular-nums; }
+.fx-dl-index-drum {
+  display: inline-block; vertical-align: top; overflow: hidden; height: var(--fx-dl-index-lh, 1.6em);
+  -webkit-mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
+          mask-image: linear-gradient(transparent, #000 16%, #000 84%, transparent);
+}
+.fx-dl-index-roll { display: block; will-change: transform; }
+.fx-dl-index-roll i { display: block; font-style: normal; text-align: center; height: var(--fx-dl-index-lh, 1.6em); line-height: var(--fx-dl-index-lh, 1.6em); }
+.fx-dl-index-big { font-family: var(--font-head, "Sora", sans-serif); font-weight: 600; letter-spacing: 0; }
+
+/* ---------- cote DAO ---------- */
+.fx-dl-index-dim { height: 16px; }
+.fx-dl-index-line {
+  position: absolute; left: 50%; top: 8px; height: 1px; width: 0;
+  background: rgba(74, 65, 54, .55); transform: scaleX(0); transform-origin: 50% 50%;
+}
+.fx-dl-index-end { position: absolute; left: 50%; top: 8px; width: 0; height: 0; }
+.fx-dl-index-end::before { content: ""; position: absolute; top: -3px; width: 0; height: 0; border-top: 3px solid transparent; border-bottom: 3px solid transparent; }
+.fx-dl-index-end::after { content: ""; position: absolute; left: -.5px; top: -7px; width: 1px; height: 14px; background: rgba(74, 65, 54, .5); }
+.fx-dl-index-l::before { left: 0; border-right: 7px solid rgba(74, 65, 54, .8); }
+.fx-dl-index-r::before { right: 0; border-left: 7px solid rgba(74, 65, 54, .8); }
+.fx-dl-index-lab {
+  position: absolute; left: 50%; top: 0; height: 16px; padding: 0 8px; background: #fff;
+  font: 600 11px/16px var(--font-head, "Sora", sans-serif); letter-spacing: .02em; color: #4A4136;
+  font-variant-numeric: tabular-nums; white-space: nowrap; transform: translate3d(-50%, 0, 0);
+  opacity: 0; transition: opacity .3s ease;
+}
+.fx-dl-index-counted .fx-dl-index-lab, .fx-dl-index-static .fx-dl-index-lab { opacity: 1; }
+
+/* ---------- code produit : palette ---------- */
+.fx-dl-index-flap { position: relative; display: inline-block; }
+.fx-dl-index-leaf { position: absolute; left: 0; top: 0; right: 0; bottom: 0; background: var(--surface, #fff); backface-visibility: hidden; transform-origin: 50% 50%; }
+.fx-dl-index-top { clip-path: inset(0 0 50% 0); }
+.fx-dl-index-bot { clip-path: inset(50% 0 0 0); }
+.fx-dl-index-flipping::after { content: ""; position: absolute; left: -1px; right: .1em; top: 50%; height: 1px; background: rgba(162, 109, 39, .35); }
+
+/* ---------- maillon qui vole vers la soumission ---------- */
+.fx-dl-index-fly {
+  position: fixed; z-index: 60; pointer-events: none; will-change: transform, opacity;
+  transform-origin: 50% 50%; filter: drop-shadow(0 8px 10px rgba(22, 19, 15, .28));
+}
+.fx-dl-index-fly.fx-dl-index-card { background: #fff; border-radius: 6px; }
+
+/* ---------- bouton : largeur fixe pendant « Ajouté ✓ » ---------- */
+.fx-dl-index-add { justify-content: center; }
+
+/* ---------- barre de soumission : entre par le bas ---------- */
+#quote-bar.fx-dl-index-bar-in { animation: fx-dl-index-bar-in .5s cubic-bezier(.2, .9, .3, 1.12) both; }
+@keyframes fx-dl-index-bar-in {
+  from { translate: 0 calc(100% + 30px); opacity: 0; }
+  to { translate: 0 0; opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-dl-index-run { display: none; }
+  .fx-dl-index img { opacity: 1 !important; }
+  #quote-bar.fx-dl-index-bar-in { animation: none; }
+}

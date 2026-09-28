@@ -1,0 +1,25 @@
+/* Logtek — « Les cernes » (page À propos / About), voir assets/js/fx-rings.js
+   - Avec JS, la place du disque est réservée dès le premier affichage sur l'icône du pin elle-même
+     (carré de 320 px max., aligné sur le texte de la carte) : le SVG injecté a exactement la même boîte, donc aucun décalage (CLS 0).
+     Le pin y est dessiné au centre, à la même taille que dans le SVG animé au départ.
+   - Sans JS : rien ne change (l'icône d'origine de 48 px).
+   - La carte ne fait plus son apparition en fondu : la croissance des cernes en tient lieu. */
+.js .story-card > .ic.big,
+.story-card > .fx-rings-svg {
+  display: block;
+  width: min(100%, 320px);
+  height: auto;
+  aspect-ratio: 1;
+  margin: 0 0 24px;
+  box-sizing: border-box;
+}
+/* Place réservée avant l'injection (ou si le script ne se charge pas) : le pin reste lisible au centre */
+.js .story-card > .ic.big { padding: calc(min(100%, 320px) * .38); }
+.story-card > .fx-rings-svg { padding: 0; overflow: visible; pointer-events: none; -webkit-user-select: none; user-select: none; }
+
+.fx-rings-svg text { font-family: var(--font-head, "Sora", sans-serif); font-variant-numeric: tabular-nums; }
+.fx-rings-svg .fx-rings-lab { font-size: 6.2px; font-weight: 600; letter-spacing: .12em; fill: #B9AD99; }
+.fx-rings-svg .fx-rings-num { font-size: 13px; font-weight: 600; letter-spacing: .02em; fill: #F3E9D8; }
+
+/* La croissance remplace le fondu d'apparition partagé, pour la carte seulement */
+.js .story-card.fx-rings-on.reveal { opacity: 1; transform: none; transition: none; }
