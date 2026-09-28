@@ -11,9 +11,22 @@
   /* ---------- Menu mobile ---------- */
   var toggle = document.querySelector(".nav-toggle");
   if (toggle) {
-    toggle.addEventListener("click", function () {
+    var navEl = document.getElementById("main-nav");
+    var closeNav = function (refocus) {
+      if (!body.classList.contains("nav-open")) return;
+      body.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false");
+      if (refocus) toggle.focus();
+    };
+    toggle.addEventListener("click", function (e) {
       var open = body.classList.toggle("nav-open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      // Clavier : le panneau s'ouvre par-dessus la page, on y amène le focus (le menu vient avant le bouton dans le HTML)
+      if (open && navEl && e.detail === 0) { var first = navEl.querySelector("a"); if (first) first.focus(); }
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeNav(navEl && navEl.contains(document.activeElement)); });
+    // Le focus quitte le menu et son bouton : on referme (sinon il tomberait sur du contenu caché sous le panneau)
+    document.addEventListener("focusin", function (e) {
+      if (body.classList.contains("nav-open") && navEl && !navEl.contains(e.target) && e.target !== toggle) closeNav(false);
     });
     document.querySelectorAll(".main-nav a").forEach(function (a) {
       a.addEventListener("click", function () { body.classList.remove("nav-open"); toggle.setAttribute("aria-expanded", "false"); });
@@ -350,7 +363,9 @@
     function onReel() { if (overlay) body.classList.toggle("on-reel", reel.getBoundingClientRect().bottom > headerH); }
     if (overlay) { window.addEventListener("scroll", onReel, { passive: true }); onReel(); }
 
-    if (!ctx || !n || reduce) {
+    // « Réduire les animations » : le vidéo suit quand même le doigt (mouvement contrôlé par la personne),
+    // mais sans ouverture en rideau, sans zoom, sans parallaxe ni grain (voir aussi style.css).
+    if (!ctx || !n) {
       // Image fixe : l'affiche <picture> reste visible et suit déjà l'orientation de l'écran
       reel.classList.add("is-open", "no-intro");
       placeLead(0); window.addEventListener("resize", function () { placeLead(0); });
@@ -467,7 +482,7 @@
       var f = INTRO_F * ie + sp * (n - 1 - INTRO_F);
       if (dirty || Math.abs(f - lastF) > .01) { if (paint(f)) { lastF = f; dirty = false; } }
       // Recul lent au défilement + poussée d'ouverture + légère parallaxe à la souris
-      var zoom = (1.1 - .07 * sp) * (1 + .14 * (1 - ie));
+      var zoom = reduce ? 1.04 : (1.1 - .07 * sp) * (1 + .14 * (1 - ie));
       media.style.transform = "translate3d(" + (-mxs * 18).toFixed(2) + "px," + (-mys * 12).toFixed(2) + "px,0) scale(" + zoom.toFixed(4) + ")";
       // Sortie : la vidéo devient une carte qui rapetisse et s'assombrit
       var e = clamp((sp - EXIT) / (1 - EXIT)), ee = e * e * (3 - 2 * e);
@@ -527,7 +542,7 @@
     window.addEventListener("resize", function () { measure(); dirty = true; placeLead(Math.max(0, cur)); wake(); });
     var swap = function () { var next = portrait.matches ? srcPt : srcSq; if (next !== src) { src = next; reset(); } };
     if (portrait.addEventListener) portrait.addEventListener("change", swap); else if (portrait.addListener) portrait.addListener(swap);
-    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    if (!reduce && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
       sticky.addEventListener("mousemove", function (e) { mx = e.clientX / window.innerWidth * 2 - 1; my = e.clientY / window.innerHeight * 2 - 1; wake(); });
       sticky.addEventListener("mouseleave", function () { mx = 0; my = 0; wake(); });
     }
@@ -537,7 +552,7 @@
 
     measure(); reset(); placeLead(0);
     if (document.fonts) document.fonts.ready.then(function () { placeLead(Math.max(0, cur)); });
-    if (window.scrollY > 40 || fbT >= 2500) openReel(true);
+    if (reduce || window.scrollY > 40 || fbT >= 2500) openReel(true);
     else setTimeout(function () { openReel(false); }, Math.max(0, Math.min(1500, 2500 - fbT)));
     sp = tp = prog(); render();
   });

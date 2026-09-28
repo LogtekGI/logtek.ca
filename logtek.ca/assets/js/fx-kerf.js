@@ -72,6 +72,7 @@
     t = kind(where(from), where(location.href), trav);
     addType(vt, t);
     if (t === "lang" || !vt.types || (W.matchMedia && W.matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+    D.documentElement.classList.add("fx-kerf-in");
     blade = D.createElement("i"); blade.className = "fx-kerf-blade" + (t === "back" ? " is-back" : ""); blade.setAttribute("aria-hidden", "true");
     var h = hd ? Math.max(0, Math.min(innerHeight, hd.getBoundingClientRect().bottom)) : 0;
     blade.style.top = h + "px";

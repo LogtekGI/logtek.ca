@@ -104,7 +104,7 @@ p { margin: 0 0 1em; }
 /* ---------- En-tête ---------- */
 .site-header {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50;
-  background: rgba(251, 248, 243, .92); backdrop-filter: saturate(1.4) blur(10px); -webkit-backdrop-filter: saturate(1.4) blur(10px);
+  background: rgba(251, 248, 243, .92); -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px);
   border-bottom: 1px solid var(--line);
 }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 72px; gap: 20px; }
@@ -478,6 +478,7 @@ p { margin: 0 0 1em; }
 .phone-glow { position: absolute; inset: 8% -20% 0; background: radial-gradient(closest-side, rgba(217, 168, 100, .35), rgba(162, 109, 39, .12) 60%, transparent); filter: blur(30px); z-index: 0; animation: glow 7s ease-in-out infinite; }
 @keyframes glow { 0%, 100% { opacity: .7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
 .hero-visual.light .phone-glow { opacity: .55; }
+body { overflow-x: clip; } /* repli sans :has() : le halo du téléphone ne fait jamais défiler la page de côté */
 .section:has(.phone-glow) { overflow-x: clip; } /* le halo (inset -20 %) élargissait la page sur cellulaire */
 .phone-shell { position: relative; z-index: 1; background: #0E0C0A; border-radius: 48px; padding: 10px;
   box-shadow: 0 0 0 1.5px #3A322A, 0 0 0 5px #0E0C0A, 0 50px 90px -40px rgba(0, 0, 0, .8), inset 0 0 0 1px rgba(255, 255, 255, .06);
@@ -585,13 +586,13 @@ p { margin: 0 0 1em; }
 .gm-me-nose { fill: #3b82f6; filter: drop-shadow(0 -1px 2px rgba(0, 0, 0, .3)); }
 @keyframes gm-pulse { 0%, 100% { transform: scale(1); opacity: .8; } 50% { transform: scale(1.3); opacity: .3; } }
 /* HUD */
-.gmap-back { position: absolute; top: 10px; left: 10px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.4); color: rgba(255,255,255,.9); display: grid; place-items: center; cursor: pointer; backdrop-filter: blur(6px); box-shadow: 0 4px 12px rgba(0,0,0,.25); }
+.gmap-back { position: absolute; top: 10px; left: 10px; width: 36px; height: 36px; border: 0; border-radius: 50%; background: rgba(0,0,0,.4); color: rgba(255,255,255,.9); display: grid; place-items: center; cursor: pointer; -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 4px 12px rgba(0,0,0,.25); }
 .gmap-back .ic { width: 17px; height: 17px; }
 .gmap-scale { position: absolute; left: 10px; bottom: 72px; padding: 3px 8px; border-radius: 4px; background: rgba(0,0,0,.6); color: #fff; font: 500 9px var(--font-body); }
-.gmap-stack { position: absolute; right: 10px; bottom: 72px; display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(0,0,0,.6); backdrop-filter: blur(8px); }
+.gmap-stack { position: absolute; right: 10px; bottom: 72px; display: flex; flex-direction: column; gap: 6px; padding: 6px; border-radius: 16px; background: rgba(0,0,0,.6); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
 .gmap-stack b, .gmap-tools b { width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.1); color: rgba(255,255,255,.9); display: grid; place-items: center; position: relative; }
 .gmap-stack b .ic, .gmap-tools b .ic { width: 14px; height: 14px; }
-.gmap-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 8px 8px 18px; border-radius: 16px 16px 0 0; background: rgba(0,0,0,.6); backdrop-filter: blur(12px); }
+.gmap-bar { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 8px 8px 18px; border-radius: 16px 16px 0 0; background: rgba(0,0,0,.6); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
 .gmap-gps { display: inline-flex; align-items: center; gap: 5px; height: 34px; padding: 0 12px; border-radius: 999px; background: var(--app-primary); color: #fff; font: 600 11px var(--font-body); }
 .gmap-gps .ic { width: 13px; height: 13px; }
 .gmap-tools { display: flex; align-items: center; gap: 4px; }
@@ -651,16 +652,16 @@ p { margin: 0 0 1em; }
 }
 
 /* Carte : bandeau « Vous êtes dans le sentier de » (TrailPresenceBanner) et badge de zone (ZoneDangerGauge) */
-.gmap-trail { position: absolute; top: 14px; left: 52px; right: 52px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 3px 5px; padding: 4px 9px; border-radius: 999px; background: rgba(6, 78, 59, .85); border: 1px solid rgba(52, 211, 153, .4); color: #fff; font: 500 9.5px/1.25 var(--font-body); backdrop-filter: blur(6px); box-shadow: 0 6px 16px rgba(0,0,0,.3); text-align: center; }
+.gmap-trail { position: absolute; top: 14px; left: 52px; right: 52px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 3px 5px; padding: 4px 9px; border-radius: 999px; background: rgba(6, 78, 59, .85); border: 1px solid rgba(52, 211, 153, .4); color: #fff; font: 500 9.5px/1.25 var(--font-body); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); box-shadow: 0 6px 16px rgba(0,0,0,.3); text-align: center; }
 .gmap-trail .ic { width: 11px; height: 11px; color: #6EE7B7; flex: none; }
 .gmap-trail b { font-weight: 600; white-space: nowrap; }
 .gmap-trail span { display: inline-flex; align-items: center; gap: 3px; padding: 1px 6px; border-radius: 999px; background: rgba(255,255,255,.15); white-space: nowrap; font-weight: 600; }
 .gmap-trail span i { font-style: normal; font-weight: 500; color: #A7F3D0; }
-.gmap-zone-badge { position: absolute; left: 10px; bottom: 96px; display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 12px; background: hsl(38, 92%, 50%); border: 2px solid rgba(255,255,255,.4); color: #fff; box-shadow: 0 6px 16px rgba(0,0,0,.3); backdrop-filter: blur(4px); }
+.gmap-zone-badge { position: absolute; left: 10px; bottom: 96px; display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 12px; background: hsl(38, 92%, 50%); border: 2px solid rgba(255,255,255,.4); color: #fff; box-shadow: 0 6px 16px rgba(0,0,0,.3); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
 .gmap-zone-badge > .ic { width: 16px; height: 16px; filter: drop-shadow(0 1px 1px rgba(0,0,0,.3)); animation: pulse-soft 1.6s ease-in-out infinite; }
 .gmap-zone-badge b { display: block; font: 600 11px/1.2 var(--font-body); }
 .gmap-zone-badge small { display: block; font: 500 9px/1.2 var(--font-body); color: rgba(255,255,255,.9); }
-.gmap-zone-badge em { margin-left: 4px; padding: 4px 7px; border-radius: 7px; background: color-mix(in srgb, hsl(38, 92%, 50%) 70%, black 30%); border: 1px solid rgba(255,255,255,.3); font: 700 13px/1 var(--font-body); font-style: normal; }
+.gmap-zone-badge em { margin-left: 4px; padding: 4px 7px; border-radius: 7px; background: #AC6F07; background: color-mix(in srgb, hsl(38, 92%, 50%) 70%, black 30%); border: 1px solid rgba(255,255,255,.3); font: 700 13px/1 var(--font-body); font-style: normal; }
 .gz-bars { display: flex; gap: 2px; margin-left: 2px; }
 .gz-bars i { width: 4px; height: 14px; border-radius: 2px; background: rgba(255, 255, 255, .3); }
 .gz-bars i.on { background: #fff; }
@@ -812,7 +813,6 @@ p { margin: 0 0 1em; }
   .reel-meta { top: 84px; bottom: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .reel { height: 100vh; }
-  .reel-hint, .reel-bars { display: none; }
+  /* le reel reste piloté par le doigt ; seuls le grain et la respiration sont coupés */
   .reel-canvas, .reel-poster, .reel-light, .reel-grain { animation: none; }
 }
