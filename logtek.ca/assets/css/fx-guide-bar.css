@@ -1,0 +1,81 @@
+/* Logtek — « Barre-guide » : chaîne .404 sur le contour des boutons (voir assets/js/fx-guide-bar.js)
+   Le SVG injecté couvre exactement la boîte de bordure du bouton (bordure de 2 px) ; les tracés suivent
+   la ligne médiane de la bordure, en unités de maillon (pathLength = N), donc le motif se referme sans couture.
+   Couleurs selon le fond autour du bouton : plaques, rivets, gouges et copeaux.
+   Rien ici ne masque de contenu : sans JS, le SVG n'existe pas et les boutons restent ordinaires. */
+
+.btn {
+  position: relative;
+  --fx-guide-bar-plate: #F3E9D8;
+  --fx-guide-bar-rivet: #7A4E17;
+  --fx-guide-bar-cutter: #5A5146;
+  --fx-guide-bar-chip: #A26D27, #C99A5B, #7D5418, #D9A864;
+}
+/* fonds sombres : héros, bandeaux sombres, barre de soumission, en-tête transparent sur le reel */
+.hero .btn, .page-hero .btn, .section-dark .btn, .quote-bar .btn,
+.js body.on-reel:not(.nav-open) .site-header .btn {
+  --fx-guide-bar-cutter: #E6E0D5;
+  --fx-guide-bar-chip: #F3E9D8, #D9A864, #E6E0D5, #C99A5B;
+}
+/* bouton fantôme sur fond sombre : plaques bronze sur le filet crème */
+.btn-ghost-light { --fx-guide-bar-plate: #A26D27; --fx-guide-bar-rivet: #1F1B16; }
+/* bande CTA bronze : bouton sombre et bouton fantôme blanc */
+.cta-band .btn { --fx-guide-bar-rivet: #0B0A08; --fx-guide-bar-cutter: #16130F; --fx-guide-bar-chip: #F3E9D8, #16130F, #FBF8F3, #3A2A14; }
+.cta-band .btn-ghost-light { --fx-guide-bar-plate: #16130F; --fx-guide-bar-rivet: #B8894C; --fx-guide-bar-cutter: #FBF8F3; }
+.add .btn.added { --fx-guide-bar-plate: #E3F0E4; }
+
+.fx-guide-bar {
+  position: absolute; left: -2px; top: -2px;
+  width: calc(100% + 4px); height: calc(100% + 4px);
+  overflow: visible; pointer-events: none;
+  fill: none; opacity: 0;
+  transition: opacity .3s linear;
+  --fx-guide-bar-o: 0; --fx-guide-bar-or: -.06; --fx-guide-bar-oc: -.11;
+}
+.fx-guide-bar.fx-guide-bar-on { opacity: 1; transition-duration: .12s; }
+.fx-guide-bar path { fill: none; }
+.fx-guide-bar-plates {
+  stroke: var(--fx-guide-bar-plate); stroke-width: 2.4; stroke-linecap: round;
+  stroke-dasharray: .62 .38; stroke-dashoffset: var(--fx-guide-bar-o);
+  transition: stroke-dasharray .12s linear, opacity .12s linear;
+}
+.fx-guide-bar-cutters {
+  stroke: var(--fx-guide-bar-cutter); stroke-width: 2.2; stroke-linecap: butt;
+  stroke-dasharray: .4 1.6; stroke-dashoffset: var(--fx-guide-bar-oc);
+  transition: stroke-dasharray .12s linear, opacity .12s linear;
+}
+.fx-guide-bar-rivets {
+  stroke: var(--fx-guide-bar-rivet); stroke-width: 1.1; stroke-linecap: round;
+  stroke-dasharray: 0 .5; stroke-dashoffset: var(--fx-guide-bar-or);
+  transition: opacity .12s linear;
+}
+/* chaîne lancée : les maillons se fondent en une bande floue */
+.fx-guide-bar-fast .fx-guide-bar-plates { stroke-dasharray: 1 0; opacity: .55; }
+.fx-guide-bar-fast .fx-guide-bar-rivets { opacity: .35; }
+.fx-guide-bar-fast .fx-guide-bar-cutters { stroke-dasharray: 2 0; opacity: .3; }
+
+/* copeaux : réserve fixe partagée, animée en WAAPI (transform/opacity) */
+.fx-guide-bar-chips { position: fixed; left: 0; top: 0; width: 0; height: 0; z-index: 60; pointer-events: none; }
+.fx-guide-bar-chips i { position: absolute; left: 0; top: 0; border-radius: 1px; opacity: 0; will-change: transform; }
+
+/* flèche « alimentée » : elle sort à droite et rentre par la gauche (2 transformations, 250 ms) */
+.js .btn:focus-visible .ic { transform: translateX(3px); }
+@media (hover: hover) {
+  .js .btn:hover > .ic:last-child { animation: fx-guide-bar-feed .25s cubic-bezier(.3, .7, .3, 1) both; }
+}
+.js .btn:focus-visible > .ic:last-child { animation: fx-guide-bar-feed .25s cubic-bezier(.3, .7, .3, 1) both; }
+@keyframes fx-guide-bar-feed {
+  0%   { transform: translateX(0); opacity: 1; }
+  42%  { transform: translateX(11px); opacity: 0; }
+  43%  { transform: translateX(-9px); opacity: 0; }
+  100% { transform: translateX(3px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-guide-bar, .fx-guide-bar path { transition: none; }
+  .js .btn .ic { transition: none; }
+  .js .btn:hover > .ic:last-child, .js .btn:focus-visible > .ic:last-child { animation: none; }
+}
+@media (forced-colors: active) {
+  .fx-guide-bar, .fx-guide-bar-chips { display: none; }
+}

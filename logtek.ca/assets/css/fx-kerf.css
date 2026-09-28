@@ -1,0 +1,78 @@
+/* Logtek — « Trait de scie » : transitions entre les pages + repère de navigation (voir fx-kerf.js)
+   - Transitions de vue entre documents, déclarées seulement si l'utilisateur accepte le mouvement.
+   - L'en-tête est figé (jamais coupé) ; le repère sous l'onglet actif glisse d'un onglet à l'autre.
+   - fwd / back : fx-kerf.js pilote la coupe (clip-path + lame) ; lang (FR ↔ EN) : fondu de 180 ms.
+   - Sans prise en charge ou sans JS : navigation normale (le fondu CSS reste si le navigateur le permet). */
+
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+  .site-header { view-transition-name: fx-kerf-header; }
+  body.nav-open .site-header { view-transition-name: none; } /* le menu ouvert part avec l'ancienne page */
+  .fx-kerf-mark { view-transition-name: fx-kerf-mark; }
+  .fx-kerf-blade { view-transition-name: fx-kerf-blade; }
+}
+
+/* ---------- Repère de navigation : une cote (trait + deux talons) sous l'onglet actif ---------- */
+.main-nav a[aria-current="page"] { position: relative; }
+.fx-kerf-mark {
+  position: absolute; left: 12px; right: 12px; bottom: 2px; height: 6px; pointer-events: none;
+  background:
+    linear-gradient(currentColor, currentColor) 0 100% / 100% 2px no-repeat,
+    linear-gradient(currentColor, currentColor) 0 100% / 2px 6px no-repeat,
+    linear-gradient(currentColor, currentColor) 100% 100% / 2px 6px no-repeat;
+  color: var(--brand, #A26D27); border-radius: 1px;
+}
+@media (max-width: 1080px) { .fx-kerf-mark { left: 9px; right: 9px; } }
+/* Menu mobile : trait vertical à gauche de l'onglet ; menu fermé, rien à faire glisser */
+@media (max-width: 960px) {
+  .fx-kerf-mark {
+    left: 0; right: auto; top: 12px; bottom: 12px; width: 6px; height: auto;
+    background:
+      linear-gradient(currentColor, currentColor) 0 0 / 2px 100% no-repeat,
+      linear-gradient(currentColor, currentColor) 0 0 / 6px 2px no-repeat,
+      linear-gradient(currentColor, currentColor) 0 100% / 6px 2px no-repeat;
+  }
+  body:not(.nav-open) .fx-kerf-mark { view-transition-name: none; }
+}
+
+/* ---------- Lame : fil chaud de 2 px sur le rayon, maillons au pas .404 (10,26 px) juste au-dessus,
+   sillage doré côté nouvelle page, ombre de trait côté ancienne page ---------- */
+.fx-kerf-blade {
+  position: fixed; left: 0; top: 0; height: 72px; margin-top: -60px; z-index: 49; /* sous l'en-tête (50) */
+  pointer-events: none; transform-origin: 0 60px; contain: strict;
+  background:
+    linear-gradient(90deg, #FFE7B8, #D9A864 45%, rgba(217, 168, 100, 0)) 0 60px / 100% 2px no-repeat,
+    repeating-linear-gradient(90deg, rgba(255, 231, 184, .75) 0 3px, rgba(255, 231, 184, 0) 3px 5px, rgba(255, 231, 184, .35) 5px 7px, rgba(255, 231, 184, 0) 7px 10.26px) 0 56px / 100% 3px no-repeat,
+    linear-gradient(to top, rgba(217, 168, 100, .22), rgba(217, 168, 100, 0)) 0 0 / 100% 60px no-repeat,
+    linear-gradient(rgba(11, 10, 8, .28), rgba(11, 10, 8, 0)) 0 62px / 100% 10px no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, #000 35%, transparent);
+  mask-image: linear-gradient(90deg, #000 35%, transparent);
+}
+.fx-kerf-blade.is-back {
+  left: auto; right: 0; transform-origin: 100% 60px;
+  background:
+    linear-gradient(270deg, #FFE7B8, #D9A864 45%, rgba(217, 168, 100, 0)) 0 60px / 100% 2px no-repeat,
+    repeating-linear-gradient(270deg, rgba(255, 231, 184, .75) 0 3px, rgba(255, 231, 184, 0) 3px 5px, rgba(255, 231, 184, .35) 5px 7px, rgba(255, 231, 184, 0) 7px 10.26px) 0 56px / 100% 3px no-repeat,
+    linear-gradient(to top, rgba(217, 168, 100, .22), rgba(217, 168, 100, 0)) 0 0 / 100% 60px no-repeat,
+    linear-gradient(rgba(11, 10, 8, .28), rgba(11, 10, 8, 0)) 0 62px / 100% 10px no-repeat;
+  -webkit-mask-image: linear-gradient(270deg, #000 35%, transparent);
+  mask-image: linear-gradient(270deg, #000 35%, transparent);
+}
+
+/* ---------- Pseudo-éléments de transition ---------- */
+::view-transition-group(root), ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 180ms; }
+::view-transition-group(fx-kerf-header) { animation-name: none; z-index: 2; }
+::view-transition-group(fx-kerf-mark) { z-index: 3; }
+::view-transition-old(fx-kerf-header), ::view-transition-new(fx-kerf-header) { animation-duration: 180ms; }
+::view-transition-group(fx-kerf-mark) { animation-duration: 460ms; animation-timing-function: cubic-bezier(.3, 1.35, .45, 1); }
+::view-transition-old(fx-kerf-mark), ::view-transition-new(fx-kerf-mark) { animation-duration: 200ms; }
+::view-transition-new(fx-kerf-mark):only-child { animation: fx-kerf-mark-in 380ms cubic-bezier(.2, .7, .2, 1) 120ms both; transform-origin: 0 50%; }
+::view-transition-group(fx-kerf-blade) { animation-name: none; }
+::view-transition-new(fx-kerf-blade) { animation: none; transform-origin: 0 60px; }
+@keyframes fx-kerf-mark-in { from { transform: scaleX(0); opacity: 0; } 30% { opacity: 1; } }
+
+/* Coupe pilotée par fx-kerf.js : pas de fondu, pas de fusion additive entre ancienne et nouvelle page */
+:root:active-view-transition-type(fwd, back)::view-transition-old(root) { animation: none; mix-blend-mode: normal; }
+:root:active-view-transition-type(fwd, back)::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+:root:active-view-transition-type(lang)::view-transition-group(fx-kerf-mark) { animation-duration: 180ms; animation-timing-function: ease; }
+:root:active-view-transition-type(back)::view-transition-new(fx-kerf-blade) { transform-origin: 100% 60px; }

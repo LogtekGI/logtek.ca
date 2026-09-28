@@ -1,0 +1,9 @@
+/* Logtek — fx-topo-stump : « Cernes topographiques » (voir fx-topo-stump.js)
+   Le canevas remplace topo.svg dans .page-hero > .topo-bg, seulement une fois dessiné (classe posée par le JS).
+   Sans JS, si la lecture échoue ou en couleurs forcées : topo.svg reste tel quel. */
+.fx-topo-stump-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
+.js .topo-bg.fx-topo-stump-live { background-image: none; }
+@media (forced-colors: active) {
+  .fx-topo-stump-canvas { display: none; }
+  .js .topo-bg.fx-topo-stump-live { background-image: url("../img/topo.svg"); }
+}

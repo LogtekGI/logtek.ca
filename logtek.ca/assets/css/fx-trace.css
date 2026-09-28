@@ -1,0 +1,70 @@
+/* Logtek — « Trace chaînée certifiée » (page Logiciel, FR et EN)
+   Styles du module fx-trace.js : les canevas décoratifs sous la section « Pas de réseau? »,
+   la fiche flottante d'un point et le petit panneau d'état ajouté dans la carte « Traces GPS certifiées »
+   (lecture façon écran de cabine, phrase d'état annoncée, bouton « Tester l'intégrité »).
+   Tout est accroché à .fx-trace-host, que seul le script ajoute : sans JS, rien ne change. */
+
+.fx-trace-host { position: relative; isolation: isolate; }
+.fx-trace-host > .wrap { position: relative; z-index: 1; }
+.fx-trace-cv { position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+.fx-trace-hud {
+  position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none;
+  opacity: 0; transition: opacity .16s ease-out; will-change: transform;
+}
+.fx-trace-hud.is-on { opacity: 1; }
+
+/* Les cartes laissent deviner la trace qui passe dessous, sans flou */
+.fx-trace-host .tech-grid > div { background: rgba(33, 28, 22, .88); }
+/* La trace porte le message : plus de torsion des icônes au survol */
+.fx-trace-host .tech-grid > div:hover .ic { transform: none; }
+
+/* Glisser un rivet : pas de sélection de texte, pas de geste tactile pendant la capture */
+.fx-trace-host.fx-trace-drag { touch-action: none; -webkit-user-select: none; user-select: none; }
+
+/* ---------- Panneau d'état (carte 3) ---------- */
+.fx-trace-panel {
+  margin-top: 16px; padding-top: 12px; border-top: 1px dashed rgba(243, 233, 216, .14);
+  display: grid; gap: 8px; justify-items: start;
+}
+.fx-trace-host .fx-trace-read {
+  margin: 0; width: 100%; height: 1.4em; overflow: hidden; white-space: nowrap; contain: layout paint;
+  font: 600 11.5px/1.4 var(--font-head); letter-spacing: .02em; font-variant-numeric: tabular-nums;
+  color: #D9A864;
+}
+.fx-trace-panel[data-state="off"] .fx-trace-read { color: #F5B544; }
+.fx-trace-panel[data-state="bad"] .fx-trace-read { color: #F87171; }
+.fx-trace-host .fx-trace-status {
+  margin: 0; display: flex; align-items: flex-start; gap: 9px;
+  min-height: 2.8em; /* deux lignes réservées : le bouton ne bouge pas */
+  font: 500 .84rem/1.4 var(--font-body); color: var(--on-dark, #F3E9D8);
+}
+.fx-trace-led {
+  flex: none; width: 7px; height: 7px; margin-top: .5em; border-radius: 50%;
+  background: #D9A864; box-shadow: 0 0 0 3px rgba(217, 168, 100, .16);
+  transition: background-color .25s, box-shadow .25s;
+}
+.fx-trace-panel[data-state="idle"] .fx-trace-led { background: #7D766B; box-shadow: 0 0 0 3px rgba(125, 118, 107, .2); }
+.fx-trace-panel[data-state="off"] .fx-trace-led { background: #F59E0B; box-shadow: 0 0 0 3px rgba(245, 158, 11, .18); }
+.fx-trace-panel[data-state="bad"] .fx-trace-led { background: #EF4444; box-shadow: 0 0 0 3px rgba(239, 68, 68, .2); }
+.fx-trace-panel[data-state="bad"] .fx-trace-status { color: #FCA5A5; }
+
+.fx-trace-test {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 9px 15px 9px 13px;
+  border: 1px solid rgba(217, 168, 100, .45); border-radius: 999px; background: transparent;
+  color: var(--on-dark, #F3E9D8); font: 600 .84rem/1 var(--font-body); cursor: pointer;
+  transition: background-color .2s, border-color .2s;
+}
+.fx-trace-test svg { width: 16px; height: 16px; color: #D9A864; flex: none; }
+.fx-trace-test:hover { background: rgba(217, 168, 100, .1); border-color: #D9A864; }
+.fx-trace-test:active { transform: translateY(1px); }
+.fx-trace-test:focus-visible { outline: 2px solid #D9A864; outline-offset: 3px; }
+@media (pointer: coarse) { .fx-trace-test { min-height: 44px; } }
+
+/* Mobile : la trace occupe une bande de 140 px juste au-dessus de la carte 3 (et de son bouton) */
+@media (max-width: 640px) {
+  .fx-trace-host .tech-grid > div:nth-child(3) { margin-top: 120px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fx-trace-hud { transition: none; }
+}
