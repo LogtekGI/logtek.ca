@@ -42,7 +42,7 @@
   var S_TXT = {
     idle: T("Illustration : trace GPS de démonstration", "Illustration: demo GPS track"),
     rec: T("Enregistrement de la trace…", "Recording the track…"),
-    off: T("Hors ligne · points gardés sur l'appareil", "No signal · points kept on the device"),
+    off: T("Hors réseau · points gardés sur l'appareil", "No signal · points kept on the device"),
     sync: function (n) { return T("Synchronisé ✓ · " + fmt(n) + " points transmis (illustration)", "Synced ✓ · " + fmt(n) + " points sent (illustration)"); },
     done: function (n) { return T("Trace vérifiée ✓ · " + fmt(n) + " points (illustration)", "Track verified ✓ · " + fmt(n) + " points (illustration)"); },
     bad: function (j, n) { return T("Altération détectée au point " + pad4(j) + " — " + fmt(n) + " points non vérifiés", "Tampering detected at point " + pad4(j) + " — " + fmt(n) + " points unverified"); },
@@ -54,7 +54,7 @@
     plate: "rgba(230,224,213,.22)", rivet: "rgba(217,168,100,.6)", goldPlate: "rgba(217,168,100,.3)",
     amberPlate: "rgba(245,158,11,.2)", amber: "rgba(245,158,11,.55)",
     red: "#EF4444", redPlate: "rgba(239,68,68,.3)", redRivet: "rgba(239,68,68,.62)",
-    zone: "rgba(243,233,216,.24)", label: "rgba(243,233,216,.4)", stamp: "rgba(243,233,216,.35)"
+    zone: "rgba(243,233,216,.24)", label: "rgba(243,233,216,.66)", stamp: "rgba(243,233,216,.62)"
   };
   var MONO = 'ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace';
   var SANS = '"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif';
@@ -79,7 +79,7 @@
   var panel = mk("div", "fx-trace-panel"), read = mk("p", "fx-trace-read"), status = mk("p", "fx-trace-status");
   var led = mk("span", "fx-trace-led"), msg = mk("span", "fx-trace-msg"), btn = mk("button", "fx-trace-test");
   read.setAttribute("aria-hidden", "true"); led.setAttribute("aria-hidden", "true");
-  status.setAttribute("role", "status"); status.setAttribute("aria-live", "polite");
+  status.setAttribute("role", "status"); status.setAttribute("aria-live", "off"); // annonces seulement après « Tester l'intégrité »
   status.appendChild(led); status.appendChild(msg);
   btn.type = "button";
   btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2v7.5a2 2 0 0 1-.2.9L4.7 20.6a1 1 0 0 0 .9 1.4h12.8a1 1 0 0 0 .9-1.4l-5.1-10.2a2 2 0 0 1-.2-.9V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>';
@@ -297,7 +297,7 @@
     var p = P[i], txt = clock(p.t) + " · " + hex(p.h);
     if (HB && p.y - 24 < HB.b && p.y - 8 > HB.t && p.x + 90 > HB.l && p.x - 90 < HB.r) return;
     c.globalAlpha = alpha;
-    c.font = "9px " + MONO; c.textAlign = "center"; c.textBaseline = "alphabetic";
+    c.font = "10px " + MONO; c.textAlign = "center"; c.textBaseline = "alphabetic";
     var tw = c.measureText(txt).width, x = Math.max(tw / 2 + 6, Math.min(W - tw / 2 - 6, p.x));
     c.strokeStyle = C.stamp; c.lineWidth = 1; c.beginPath(); c.moveTo(p.x, p.y - 4.5); c.lineTo(p.x, p.y - 10); c.stroke();
     c.fillStyle = C.stamp; c.fillText(txt, x, p.y - 13);
@@ -412,7 +412,7 @@
     }
     if (r.h >= r.end && !sync && !stamps.length && !pulses.length) {
       run = null;
-      if (r.kind === "story") { finished = true; setStatus("ok", S_TXT.done(N)); }
+      if (r.kind === "story" || finished) { finished = true; setStatus("ok", S_TXT.done(N)); }
       setRead(clock(P[N - 1].t) + " · #" + hex(P[N - 1].h) + " · " + fmt(N) + " pts");
       return false;
     }
@@ -556,6 +556,7 @@
   }
   function runTest() {
     if (!N) return;
+    status.setAttribute("aria-live", "polite");
     if (tm && tm.mode !== "heal") return;
     if (!started) { started = true; finalize(); }
     var j = pickTestPoint(), a = P[j].a, nx = -Math.sin(a), ny = Math.cos(a);

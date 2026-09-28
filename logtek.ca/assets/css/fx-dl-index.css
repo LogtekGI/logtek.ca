@@ -44,7 +44,7 @@
   font: 600 11px/14px var(--font-head, "Sora", sans-serif); letter-spacing: .02em; color: #8A5A1E;
   --fx-dl-index-lh: 14px;
 }
-.fx-dl-index-read small { font: 600 8.5px/14px var(--font-body, sans-serif); letter-spacing: .12em; color: #72685A; padding-top: 2px; }
+.fx-dl-index-read small { font: 600 10px/14px var(--font-body, sans-serif); letter-spacing: .12em; color: #72685A; padding-top: 2px; }
 .fx-dl-index-glint {
   position: absolute; left: 0; top: -2px; width: 26px; height: 26px; border-radius: 50%;
   background: radial-gradient(closest-side, rgba(255, 236, 196, .95), rgba(217, 168, 100, .55) 45%, rgba(217, 168, 100, 0));

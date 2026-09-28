@@ -255,8 +255,13 @@
     set.keys.forEach(function (k) {
       var im = new Image();
       im.onload = function () {
-        var go = function () { if (set.dead) return; jobs[k] = { k: k, im: im, lv: 0, polys: [] }; set.pending.push({ job: jobs[k] }); schedule(set); };
-        if (im.decode) im.decode().then(go, go); else go();
+        var go = function (bmp) { if (set.dead) return; jobs[k] = { k: k, im: im, bmp: bmp && bmp.width ? bmp : null, lv: 0, polys: [] }; set.pending.push({ job: jobs[k] }); schedule(set); };
+        // Réduction à la taille de la grille par le navigateur (hors du fil principal quand c'est possible) :
+        // le drawImage + getImageData qui suit ne touche plus qu'une vignette de ~96 px.
+        if (window.createImageBitmap) {
+          try { createImageBitmap(im, { resizeWidth: set.GW, resizeHeight: set.GH, resizeQuality: "medium" }).then(go, function () { go(null); }); return; } catch (e) { /* options non prises en charge */ }
+        }
+        if (im.decode) im.decode().then(function () { go(null); }, function () { go(null); }); else go(null);
       };
       im.src = set.src + pad(k);
     });
@@ -266,7 +271,7 @@
         if (!set.levels && j.k !== set.ref) return false; // la référence fixe les niveaux : on attend
         if (!cx) { cv.width = set.GW; cv.height = set.GH; cx = cv.getContext("2d", { willReadFrequently: true }); }
         if (!set.FW) { set.FW = j.im.naturalWidth; set.FH = j.im.naturalHeight; sizeIso(); }
-        cx.drawImage(j.im, 0, 0, set.GW, set.GH);
+        cx.drawImage(j.bmp || j.im, 0, 0, set.GW, set.GH);
         j.Y = CORE.lum(cx.getImageData(0, 0, set.GW, set.GH).data, set.GW, set.GH);
         if (!set.levels) set.levels = CORE.levels(j.Y, set.GW, set.GH, set.NL, SKY);
         return true;
@@ -375,7 +380,7 @@
     reel.classList.toggle(P + "on", v);
     breathe(v && visible);
     if (!v && shade) shade.style.opacity = "";
-    if (!v) { if (leak) leak.style.opacity = ""; if (grainEl) grainEl.style.opacity = ""; }
+    if (!v) { if (leak) leak.style.opacity = ""; if (grainEl) grainEl.style.opacity = ""; releaseBreathe(); }
   }
   function setLabel(v) {
     if (v === labelOn || !ci) return;
@@ -391,6 +396,23 @@
       var a = find(base), b = find(iso);
       if (a && b) Promise.all([a.ready, b.ready]).then(function () { if (a.startTime != null) b.startTime = a.startTime; })["catch"](function () {});
     }
+  }
+  // Pendant la sortie, la respiration revient doucement à l'échelle 1 (la carte du hero est calculée pour l'échelle 1) :
+  // on fige les deux animations et on ramène leur temps vers 0 avec ee, sans saut. Durée : 16 s aller, 16 s retour.
+  var settleEq = -1;
+  function breatheAnims() {
+    return [base, iso].map(function (el) { return el && el.getAnimations ? el.getAnimations().filter(function (a) { return a.animationName === "reel-breathe"; })[0] : null; }).filter(Boolean);
+  }
+  function settleBreathe(ee) {
+    if (REDUCE) return;
+    var list = breatheAnims(); if (!list.length) return;
+    if (settleEq < 0) { var t = (list[0].currentTime || 0) % 32000; settleEq = t <= 16000 ? t : 32000 - t; }
+    var ct = settleEq * (1 - ee);
+    list.forEach(function (a) { if (a.playState !== "paused") a.pause(); a.currentTime = ct; });
+  }
+  function releaseBreathe() {
+    if (settleEq < 0) return; settleEq = -1;
+    breatheAnims().forEach(function (a) { a.play(); });
   }
   function headAt(set, f) {
     var tr = set.head, i = 0;
@@ -490,7 +512,7 @@
       var key = ee.toFixed(4) + "|" + f.toFixed(3);
       if (key === last) return false;
       last = key;
-      setOn(true);
+      setOn(true); settleBreathe(ee);
       var td = performance.now(); draw(ee, f); td = performance.now() - td; stats.draws++; stats.drawMs += td; if (td > stats.maxDraw) stats.maxDraw = td;
       return true; // une image de plus : main.js peut encore être en train de lisser la position
     }
@@ -549,6 +571,7 @@
     if (!phone || !Element.prototype.animate) return;
     var hr = hero.getBoundingClientRect(), pr = phone.getBoundingClientRect(); // lu une seule fois
     var W = hr.width, Hh = hr.height, px = pr.left - hr.left, pTop = pr.top - hr.top, pBot = pr.bottom - hr.top;
+    var copy = hero.querySelector(".hero-copy"), copyR = copy ? copy.getBoundingClientRect().right - hr.left + 24 : 0;
     if (px < W * .45) return; // une seule colonne (cellulaire) : le téléphone n'est pas à côté
     var T = heroTiles(W, Hh), polys = S.data[S.ref].polys || [], best = null;
     var y0 = Math.max(24, pTop + 60), y1 = Math.min(Hh - 24, pBot - 60);
@@ -557,7 +580,7 @@
         var p = q.p, m = p.length / 2, run = [], runs = [];
         for (var i = 0; i < m; i++) {
           var x = t.a * p[2 * i] + t.e, y = t.d * p[2 * i + 1] + t.f;
-          if (x >= 0 && x <= px + 2 && y >= 24 && y <= Hh - 24) run.push(x, y);
+          if (x >= copyR && x <= px + 2 && y >= 24 && y <= Hh - 24) run.push(x, y);
           else { if (run.length > 4) runs.push(run); run = []; }
         }
         if (run.length > 4) runs.push(run);
@@ -607,6 +630,9 @@
   function drawStatic() {
     var d = S && S.data[S.ref];
     if (!d) return;
+    // Le vidéo suit le doigt même en « réduire les animations » (main.js publie reel._ltk) : des courbes figées
+    // ne correspondraient plus à l'image ; on garde seulement la carte statique du hero.
+    if (reel._ltk) { clearIso(); return; }
     sizeIso();
     var FW = S.FW, FH = S.FH, k = KS, s = cover;
     ictx.setTransform(k, 0, 0, k, 0, 0); ictx.clearRect(0, 0, FW, FH);

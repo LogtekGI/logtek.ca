@@ -76,3 +76,6 @@
 :root:active-view-transition-type(fwd, back)::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
 :root:active-view-transition-type(lang)::view-transition-group(fx-kerf-mark) { animation-duration: 180ms; animation-timing-function: ease; }
 :root:active-view-transition-type(back)::view-transition-new(fx-kerf-blade) { transform-origin: 100% 60px; }
+
+/* La coupe sert d'entrée : pas de seconde montée du texte du haut de page pendant qu'elle passe */
+.fx-kerf-in .page-hero .wrap > *, .fx-kerf-in .hero-copy > * { animation: none; }

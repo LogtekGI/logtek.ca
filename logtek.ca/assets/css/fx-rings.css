@@ -18,7 +18,7 @@
 .story-card > .fx-rings-svg { padding: 0; overflow: visible; pointer-events: none; -webkit-user-select: none; user-select: none; }
 
 .fx-rings-svg text { font-family: var(--font-head, "Sora", sans-serif); font-variant-numeric: tabular-nums; }
-.fx-rings-svg .fx-rings-lab { font-size: 6.2px; font-weight: 600; letter-spacing: .12em; fill: #B9AD99; }
+.fx-rings-svg .fx-rings-lab { font-size: 8px; font-weight: 600; letter-spacing: .12em; fill: #B9AD99; }
 .fx-rings-svg .fx-rings-num { font-size: 13px; font-weight: 600; letter-spacing: .02em; fill: #F3E9D8; }
 
 /* La croissance remplace le fondu d'apparition partagé, pour la carte seulement */
